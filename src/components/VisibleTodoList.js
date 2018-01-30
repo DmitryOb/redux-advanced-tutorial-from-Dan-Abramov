@@ -13,12 +13,13 @@ const getVisibleTodos = (todos, filter) => {
 		default: throw new Error('Unknown filter: ${filter}.');
 	}
 }
-const mapStateToProps = (state, ownProps) => ({
-	todos: getVisibleTodos(state.todos, ownProps.filter)
+
+const mapStateToProps = (state, { match:{params} } ) => ({
+	todos: getVisibleTodos(state.todos, params.filter || 'all')
 });
 const mapDispatchToProps = (dispatch) => ({
 	onTodoClick(id) {dispatch(toggleTodo(id))}
 });
-const VisibleTodoList = connect(mapStateToProps, mapDispatchToProps)(TodoList);
+const VisibleTodoList = withRouter(connect(mapStateToProps, mapDispatchToProps)(TodoList));
 
 export default VisibleTodoList;

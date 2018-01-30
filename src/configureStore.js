@@ -22,6 +22,8 @@ const addLoggingToDispatch = (store) => {
 
 const configureStore = () => {
 	const persistedState = loadState();
+	// создаем стор из todoApp и добавляем начальное состояние :
+	// результат распарсивания localStorage.getItem('state') либо undefined
 	const store = createStore(todoApp, persistedState);
 
 	if(process.env.NODE_ENV !== 'production'){
@@ -30,11 +32,10 @@ const configureStore = () => {
 
 	console.log(store.getState());
 
-	store.subscribe(throttle(() => {
-		saveState({
-			todos: store.getState().todos
-		});
-	}, 1000));
+	//если стор изменился то записываем в стор localStorage.setItem('state')
+	store.subscribe(
+		throttle( () => { saveState({ todos: store.getState().todos }); }, 1000 )
+	);
 
 	return store;
 }
