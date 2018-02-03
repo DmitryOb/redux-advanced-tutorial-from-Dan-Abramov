@@ -6,28 +6,26 @@ import * as actions from '../actions'
 import TodoList from './TodoList';
 import { todos } from '../reducers';
 import { getVisibleTodos } from '../reducers';
-import { fetchTodos } from '../api';
 
 class VisibleTodoList extends Component {
 
-	//после отображения компонента делаем фетч
+	// после того как компонент отрендерился вызываем метод fetchData()
 	componentDidMount(){
 		this.fetchData();
 	}
 
-	//после обновления компонента (если фильтра сменился у роутера) делаем фетч
+	// и есои компонент обновился и изменился filter то тоже вызываем метод fetchData()
 	componentDidUpdate(prevProps){
 		if (this.props.filter !== prevProps.filter){
 			this.fetchData();
 		}
 	}
 
-	// делаем dispatch action receiveTodos после действий роутера с параметром фетча
+	// этот метод принимает в качестве аргумента пропсы: filter и экшн fetchTodos
+	// делаем dispatch action fetchTodos с параметром filter
 	fetchData(){
-		const { filter, receiveTodos } = this.props;
-		fetchTodos(filter).then(todos =>
-			receiveTodos(filter, todos)
-		)
+		const { filter, fetchTodos } = this.props;
+		fetchTodos(filter);
 	}
 
 	render(){
@@ -53,7 +51,7 @@ const mapStateToProps = (state, { match:{params} } ) => {
 }
 
 // оборачиваем компонент withRouter'ом чтобы он мог принимать params.filter
-// и вторым аргументом "actions" передаем все экшн криеторы как пропсы вида toggleTodo = this.props.toggleTodo
+// аргументом "actions" передаем все экшн криеторы как пропсы вида toggleTodo = this.props.toggleTodo
 VisibleTodoList = withRouter(connect(
 	mapStateToProps, 
 	actions
