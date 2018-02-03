@@ -9,12 +9,11 @@ const fakeDatabase = {
 	],
 };
 
-
 const delay = (ms) =>
 	new Promise(resolve => setTimeout(resolve, ms));
 
 export const fetchTodos = (filter) =>
-	delay(2000).then(() => {
+	delay(1000).then(() => {
 		switch (filter) {
 			case 'all': return fakeDatabase.todos
 			case 'active': return fakeDatabase.todos.filter(t => !t.completed)
