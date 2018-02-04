@@ -14,7 +14,7 @@ class VisibleTodoList extends Component {
 		this.fetchData();
 	}
 
-	// и есои компонент обновился и изменился filter то тоже вызываем метод fetchData()
+	// и если компонент обновился и изменился filter то тоже вызываем метод fetchData()
 	componentDidUpdate(prevProps){
 		if (this.props.filter !== prevProps.filter){
 			this.fetchData();

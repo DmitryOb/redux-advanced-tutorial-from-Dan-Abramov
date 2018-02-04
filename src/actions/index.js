@@ -7,7 +7,7 @@ const receiveTodos = (filter, response) => ({
 	response,
 })
 
-// в этой функции ожидаем ответ от api и затем делаем store.dispatch
+// в этом экшене делаем запрос к API в ответ получаем промис и передаем в middlewares
 export const fetchTodos = (filter) => 
 	api.fetchTodos(filter).then(response => 
 		receiveTodos(filter, response)
