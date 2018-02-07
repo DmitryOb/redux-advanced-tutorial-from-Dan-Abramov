@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware } from 'redux';
 import promise from 'redux-promise';
 import createLogger from 'redux-logger';
-import todoApp from './reducers';
+import todoApp from './reducers/index.js';
 
 // используем готовые библиотеки для поддержки промисов и логгирования диспатчей
 const configureStore = () => {
@@ -13,7 +13,7 @@ const configureStore = () => {
 	}
 	// при необходимости можно добавить persistedState
 	return createStore(
-		todoApp, 
+		todoApp,
 		applyMiddleware(...middlewares)
 	);
 };

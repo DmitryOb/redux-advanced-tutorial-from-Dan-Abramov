@@ -1,6 +1,4 @@
-import { Provider, connect } from 'react-redux';
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react';
 
 const Todo = ({ onClick, completed, text }) => (
 	<li

@@ -1,6 +1,5 @@
-import { Provider, connect } from 'react-redux';
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import { connect } from 'react-redux';
+import React from 'react';
 import { addTodo } from '../actions'
 
 let AddTodo = ({ dispatch }) => {

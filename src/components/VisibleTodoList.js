@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
-import { Provider, connect } from 'react-redux';
+import { connect } from 'react-redux';
 // всё из экспорта '../actions' теперь будет здесь как в объекте actions так и отдельно
 import * as actions from '../actions'
 import TodoList from './TodoList';
-import { todos } from '../reducers';
 import { getVisibleTodos } from '../reducers';
 
 class VisibleTodoList extends Component {

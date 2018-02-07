@@ -1,14 +1,45 @@
 import { combineReducers } from 'redux';
-import todos, * as fromTodos from './todos';
+import byId, * as fromById from './byId';
+import createList, * as fromList from './createList';
 
-const todoApp = combineReducers({ todos })
-// const todoApp = (state = {}, action) => {
+const listByFilter = combineReducers({
+	all: createList('all'),
+	active: createList('active'),
+	completed: createList('completed')
+})
+
+const todos = combineReducers({ byId, listByFilter })
+// const todos = (state = {}, action) => {
 // 	return {
-// 		todos: todos(state.todos, action)
+// 		byId: byId(state.byId, action),
+//		listByFilter: listByFilter(state.listByFilter, action)
 // 	};
 // };
 
-export default todoApp;
+// формат нашего cтэйта при INIT:
+// {
+// 	byID: {},
+// 	listByFilter: {all: [], active:[], completed: []} 
+// }
 
-export const getVisibleTodos = (state, filter) =>
-	fromTodos.getVisibleTodos(state.todos, filter);
+// после ответа от API формат стэйта таков
+// фильтр редьюсера накаладывается поверх фильтра роутера:
+// {
+// 	byID: {
+// 		xxxxxxx: {id: 'xxxxxxx', text: 'lets go', completed: false},
+// 		xxxxxxx: {id: 'xxxxxxx', text: 'ho', completed: true},
+// 		xxxxxxx: {id: 'xxxxxxx', text: 'hey', completed: true}
+// 	},
+// 	listByFilter: {
+// 		active: [xxxxxxx],
+// 		all: [xxxxxxx, xxxxxxx, xxxxxxx],
+// 		completed: [xxxxxxx, xxxxxxx]
+// 	}
+// }
+
+export default todos;
+
+export const getVisibleTodos = (state, filter) => {
+	const ids = fromList.getIds(state.listByFilter[filter]);
+	return ids.map(id => fromById.getTodo(state.byId, id));
+}
