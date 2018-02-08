@@ -19,7 +19,10 @@ const todos = combineReducers({ byId, listByFilter })
 // формат нашего cтэйта при INIT:
 // {
 // 	byID: {},
-// 	listByFilter: {all: [], active:[], completed: []} 
+// 	listByFilter: {
+// 		all: {ids:[], isFetching: false}, 
+// 		active:{ids:[], isFetching: false}, 
+// 		completed: {ids:[], isFetching: false}
 // }
 
 // после ответа от API формат стэйта таков
@@ -31,9 +34,9 @@ const todos = combineReducers({ byId, listByFilter })
 // 		xxxxxxx: {id: 'xxxxxxx', text: 'hey', completed: true}
 // 	},
 // 	listByFilter: {
-// 		active: [xxxxxxx],
-// 		all: [xxxxxxx, xxxxxxx, xxxxxxx],
-// 		completed: [xxxxxxx, xxxxxxx]
+// 		active: { ids:[xxxxxxx], isFetching: false },
+// 		all: { ids:[xxxxxxx, xxxxxxx, xxxxxxx], isFetching: true},
+// 		completed: { ids:[xxxxxxx, xxxxxxx], isFetching: true}
 // 	}
 // }
 
@@ -43,3 +46,6 @@ export const getVisibleTodos = (state, filter) => {
 	const ids = fromList.getIds(state.listByFilter[filter]);
 	return ids.map(id => fromById.getTodo(state.byId, id));
 }
+
+export const getIsFetching = (state, filter) =>
+	fromList.getIsFetching(state.listByFilter[filter]);

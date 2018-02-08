@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 // всё из экспорта '../actions' теперь будет здесь как в объекте actions так и отдельно
 import * as actions from '../actions'
 import TodoList from './TodoList';
-import { getVisibleTodos } from '../reducers';
+import { getVisibleTodos, getIsFetching } from '../reducers';
 
 class VisibleTodoList extends Component {
 
@@ -23,16 +23,19 @@ class VisibleTodoList extends Component {
 	// этот метод принимает в качестве аргумента пропсы: filter и экшн fetchTodos
 	// делаем dispatch action fetchTodos с параметром filter
 	fetchData(){
-		const { filter, fetchTodos } = this.props;
+		const { filter, requestTodos, fetchTodos } = this.props;
+		requestTodos(filter);
 		fetchTodos(filter);
 	}
 
 	render(){
-		// в '...rest' хранятся вообще все пропсы из класса формата toggleTodo = this.props.toggleTodo
-		const { toggleTodo, ...rest } = this.props;
+		const { toggleTodo, todos, isFetching } = this.props;
+		if (isFetching && !todos.length) {
+			return <p>Loading...</p>;
+		}
 		return (
 				<TodoList 
-					{...rest} 
+					todos={todos}
 					onTodoClick={ toggleTodo }
 				/>
 		);
@@ -45,6 +48,7 @@ const mapStateToProps = (state, { match:{params} } ) => {
 	const filter = params.filter || 'all';
 	return {
 		todos: getVisibleTodos(state, filter),
+		isFetching: getIsFetching(state, filter),
 		filter
 	}
 }
