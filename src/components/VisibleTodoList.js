@@ -22,6 +22,7 @@ class VisibleTodoList extends Component {
 
 	// этот метод принимает в качестве аргумента пропсы: filter и экшн fetchTodos
 	// делаем dispatch action fetchTodos с параметром filter
+	// fetchTodos(filter) возвращает промис и можно использовать .then
 	fetchData(){
 		const { filter, fetchTodos } = this.props;
 		fetchTodos(filter);
