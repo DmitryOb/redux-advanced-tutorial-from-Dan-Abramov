@@ -23,13 +23,13 @@ class VisibleTodoList extends Component {
 	// этот метод принимает в качестве аргумента пропсы: filter и экшн fetchTodos
 	// делаем dispatch action fetchTodos с параметром filter
 	fetchData(){
-		const { filter, requestTodos, fetchTodos } = this.props;
-		requestTodos(filter);
+		const { filter, fetchTodos } = this.props;
 		fetchTodos(filter);
 	}
 
 	render(){
 		const { toggleTodo, todos, isFetching } = this.props;
+		// при action.type REQUEST_TODOS isFetching будет true
 		if (isFetching && !todos.length) {
 			return <p>Loading...</p>;
 		}
@@ -43,7 +43,7 @@ class VisibleTodoList extends Component {
 
 }
 
-// наделим компонент пропсом фильтра: this.props.filter
+// наделяем компонент пропсами обращаясь к редьюсеру
 const mapStateToProps = (state, { match:{params} } ) => {
 	const filter = params.filter || 'all';
 	return {

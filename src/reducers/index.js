@@ -42,10 +42,13 @@ const todos = combineReducers({ byId, listByFilter })
 
 export default todos;
 
+// getVisibleTodos и getIsFetching наделяют пропсами компонент из createList.js
 export const getVisibleTodos = (state, filter) => {
 	const ids = fromList.getIds(state.listByFilter[filter]);
 	return ids.map(id => fromById.getTodo(state.byId, id));
 }
 
 export const getIsFetching = (state, filter) =>
+//при INIT в случае с all пердаем в функцию {ids:[], isFetching: false}
+	//getIsFetching = (state) => state.isFetching;
 	fromList.getIsFetching(state.listByFilter[filter]);
