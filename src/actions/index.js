@@ -2,17 +2,6 @@ import { v4 } from 'node-uuid';
 import * as api from '../api';
 import { getIsFetching } from '../reducers';
 
-const requestTodos = (filter) => ({
-	type: 'REQUEST_TODOS',
-	filter,
-})
-
-const receiveTodos = (filter, response) => ({
-	type: 'RECEIVE_TODOS',
-	filter,
-	response,
-})
-
 // в этом экшене делаем два асинхронных диспатча к API
 export const fetchTodos = (filter) => (dispatch, getState) => {
 	// если isFetching = true то выходим без диспатча
@@ -20,13 +9,29 @@ export const fetchTodos = (filter) => (dispatch, getState) => {
 	if (getIsFetching(getState(), filter)) {
 		return Promise.resolve();
 	}
-	// сначала происходит action.type: 'REQUEST_TODOS' - isFetching становится true
-	dispatch(requestTodos(filter));
-	// затем передаем в middlewares промис на action.type: 'RECEIVE_TODOS'
-	// когда получаем ответ то запускаем reducer
-	return api.fetchTodos(filter).then(response => {
-		dispatch(receiveTodos(filter, response));
+	// сначала происходит action.type: 'FETCH_TODOS_REQUEST' - isFetching становится true
+	dispatch({
+		type: 'FETCH_TODOS_REQUEST',
+		filter,
 	});
+	// затем передаем в middlewares промис и ждем FAILURE/SUCCESS диспатча
+	// когда получаем ответ то запускаем reducer
+	return api.fetchTodos(filter).then(
+		response => {
+			dispatch({
+				type: 'FETCH_TODOS_SUCCESS',
+				filter,
+				response,
+			});
+		},
+		error => {
+			dispatch({
+				type: 'FETCH_TODOS_FAILURE',
+				filter,
+				message: error.message || 'Something went wrong.'
+			})
+		}
+	);
 };
 
 export const addTodo = (text) => ({

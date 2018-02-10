@@ -20,9 +20,9 @@ const todos = combineReducers({ byId, listByFilter })
 // {
 // 	byID: {},
 // 	listByFilter: {
-// 		all: {ids:[], isFetching: false}, 
-// 		active:{ids:[], isFetching: false}, 
-// 		completed: {ids:[], isFetching: false}
+// 		all: {ids:[], isFetching: false, errorMessage 'null'}, 
+// 		active:{ids:[], isFetching: false, errorMessage 'null'}, 
+// 		completed: {ids:[], isFetching: false, errorMessage 'null'}
 // }
 
 // после ответа от API формат стэйта таков
@@ -34,21 +34,22 @@ const todos = combineReducers({ byId, listByFilter })
 // 		xxxxxxx: {id: 'xxxxxxx', text: 'hey', completed: true}
 // 	},
 // 	listByFilter: {
-// 		active: { ids:[xxxxxxx], isFetching: false },
-// 		all: { ids:[xxxxxxx, xxxxxxx, xxxxxxx], isFetching: true},
-// 		completed: { ids:[xxxxxxx, xxxxxxx], isFetching: true}
+// 		active: { ids:[xxxxxxx], isFetching: false, errorMessage 'Boom'},
+// 		all: { ids:[xxxxxxx, xxxxxxx, xxxxxxx], isFetching: true, errorMessage 'Boom'},
+// 		completed: { ids:[xxxxxxx, xxxxxxx], isFetching: true, errorMessage 'Boom'}
 // 	}
 // }
 
 export default todos;
 
-// getVisibleTodos и getIsFetching наделяют пропсами компонент из createList.js
+// наделяем пропсами компонент из createList.js
 export const getVisibleTodos = (state, filter) => {
 	const ids = fromList.getIds(state.listByFilter[filter]);
 	return ids.map(id => fromById.getTodo(state.byId, id));
 }
-
 export const getIsFetching = (state, filter) =>
 //при INIT в случае с all пердаем в функцию {ids:[], isFetching: false}
 	//getIsFetching = (state) => state.isFetching;
 	fromList.getIsFetching(state.listByFilter[filter]);
+export const getErrorMEssage = (state, filter) =>
+	fromList.getErrorMEssage(state.listByFilter[filter]);
