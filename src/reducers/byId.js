@@ -1,17 +1,11 @@
 const byId = (state = {}, action) => {
-	switch (action.type) {
-		case 'FETCH_TODOS_SUCCESS':
-			const nextState = { ...state };
-			action.response.forEach(todo =>{
-				// todo = {id: "xxxxxxx", text: "ho", completed: true}
-				// записываем каждый todo в объект nextState
-				nextState[todo.id] = todo;
-			})
-			// на выходе получаем объект с 3 объектами формата:
-			// xxxxxxx: {id: 'xxxxxxx', text: 'ho', completed: true},
-			return nextState;
-		default: return state;
+	if (action.response) {
+		return {
+			...state,
+			...action.response.entities.todos
+		};
 	}
+	return state;
 };
 
 export default byId;
