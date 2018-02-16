@@ -1,21 +1,23 @@
 import { createStore, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 import todoApp from './reducers/index.js';
+import createSagaMiddleware from 'redux-saga'
+import mySaga from './sagas'
 
 const configureStore = () => {
-// добавляем thunk (преобразователь) middlewares для множественных экшенов
-// используем его после логирования в том случае когда у нас промис
-	const middlewares = [thunk];
-	// используем готовую библиотеку для логирования диспатчей
+	const sagaMiddleware = createSagaMiddleware()
+	const middlewares = [sagaMiddleware];
+
 	if(process.env.NODE_ENV !== 'production'){ 
 		middlewares.push(createLogger); 
 	}
-	// при необходимости можно добавить persistedState
-	return createStore(
+	
+	const store = createStore(
 		todoApp,
 		applyMiddleware(...middlewares)
 	);
+	sagaMiddleware.run(mySaga)
+	return store;
 };
 
 export default configureStore;
